@@ -21,7 +21,7 @@ def polynomial_regression(x, y, m):
     n = np.shape(x)[0]
     e = np.array([np.array([1] * n)])
     concat = np.concatenate((e.T, x), axis = 1)
-    for i in range(2, m):
+    for i in range(2, m + 1):
         concat = np.concatenate((concat, x**i), axis = 1)
     return regression(concat, y)
 
