@@ -1,36 +1,44 @@
 import numpy as np
 import random
 import math
-#import sklearn
 
 
-def distance(x, y):
-    return math.sqrt((x[0] - y[0])**2 + (x[1] - y[1])**2)
+def distance1(x, y):
+    return math.sqrt((x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2)
 
-def splitTrainTest (data, testPercent):
+def distance2(x, y):
+    return abs(x[0] - y[0]) + abs(x[1] - y[1])
+
+def distance3(x, y):
+    return max(abs(x[0] - y[0]), abs(x[1] - y[1]))
+
+def splitData(data, k):
     trainData = []
-    testData  = []
-    for row in data:
-        if random.random() < testPercent:
-            testData.append(row)
-        else:
-            trainData.append(row)
-    return trainData, testData
+    testData = []
+    train_test_data = []
+    n = data.shape[0]
+    m = n // k
+    for i in range(1, k - 1):
+        for j in range(n):
+            if j < i * m and j >= (i - 1) * m:
+                testData.append(data[j])
+            else:
+                trainData.append(data[j])
+        train_test_data.append([trainData, testData])
+        trainData.clear()
+        testData.clear()
+    return train_test_data
 
-
-def kNN(trainData, testData, x, k):
+def kNN(test_train_data, k, distance):
     lst = []
-    #lst2 = []
-    #for testPoint in testData:
-        #testDist = [ [distance(testPoint, trainData[i][0]), trainData[i][1]] for i in range(len(trainData))]
-
-    for i in range(0, trainData.size):
-        lst.append(distance(x, trainData[i]))
-    lst.sort()
-    lst2 = lst[0:k + 1]
-
-    dist = []
-    for point in testData:
-        dist.append([distance(point, trainData[i])] for i in range(testData.size))
+    array = np.ndarray
+    for i in range(len(test_train_data)):
+        trainData = test_train_data[i, 0]
+        testData = test_train_data[i, 1]
+        for point in testData:
+            for point1 in trainData:
+                lst.append(distance(point, point1))
+            np.concatenate((array, lst))
+            ###
 
 
