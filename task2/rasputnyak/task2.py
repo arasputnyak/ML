@@ -34,16 +34,44 @@ def not_line_regression(x, y, func):
         concat = np.concatenate((concat, func[i - 1](x)), axis = 1)
     return regression(concat, y)
 
-def f1(x):
-    return x**2
-def f2(x):
-    return x
-def f3(x):
-    return x - 1
-def f4(x):
-    return x + 1
+# def f1(x):
+#     return x**2
+# def f2(x):
+#     return x
+# def f3(x):
+#     return x - 1
+# def f4(x):
+#     return x + 1
 
+def k_fold(data, k):
+    trainData = []
+    testData = []
+    train_test_data = []
+    n = data.shape[0]
+    m = n // k
+    for i in range(1, k - 1):
+        for j in range(n):
+            if j < i * m and j >= (i - 1) * m:
+                testData.append(data[j])
+            else:
+                trainData.append(data[j])
+        train_test_data.append([trainData, testData])
+        trainData.clear()
+        testData.clear()
+    return train_test_data
 
+def cross_validation(train_test_data, regression_type, k):
+    errors = []
+    for i in range(k):
+        train = train_test_data[i][0]
+        test = train_test_data[i][1]
+        x_tr = train[0], x_tst = test[0]
+        y_tr = train[1], y_tst = test[1]
+        beta = regression_type(x_tr, y_tr)
+        err = 0
+        for j in range(len(y_tst)):
+            err += (y_tst[j] - beta) ** 2
+        errors.append(err)
 
 #a = np.array([[2], [1], [1], [8]])
 #b = np.array([[5], [0], [1], [0]])
