@@ -83,8 +83,11 @@ def two_point_cross(pairs, n):
         new_chrome.append(c2)
     return new_chrome
 
-def mutation(chrome, v):
-    r = random.randint(len(chrome))
+def mutation(chrome1, v):
+    chrome = copy.deepcopy(chrome1)
+    for i in range(len(chrome)):
+        r = random.randint(1, len(chrome[i]) - 1)
+        chrome[i][r - 1], chrome[i][r + 1] = chrome[i][r + 1], chrome[i][r - 1]
     return chrome
 
 
