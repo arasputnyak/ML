@@ -3,18 +3,17 @@ import random, copy
 
 def f(x):
     n = x.shape
-    fc = np.array(n)
     for i in range(n):
-        fc[i] = 3 * x[i] + 8
+        fc += 3 * x[i] + 8
     return fc
 
 def gen_alg(f, m, n, p, b):
     new_gen = generation(m, n)
-    for k in range(k):
+    for k in range(20):
         pairs = paIrs(new_gen, p)
         new_chrome = two_point_cross(pairs, n)
-        mut = mutation(new_gen, 0.01)
-        mut2 = mutation(new_chrome, 0.01)
+        mut = mutation(new_gen)
+        mut2 = mutation(new_chrome)
         func = []
         all_ch = new_gen + new_chrome + mut + mut2
         for i in range(len(all_ch)):
@@ -83,7 +82,7 @@ def two_point_cross(pairs, n):
         new_chrome.append(c2)
     return new_chrome
 
-def mutation(chrome1, v):
+def mutation(chrome1):
     chrome = copy.deepcopy(chrome1)
     for i in range(len(chrome)):
         r = random.randint(1, len(chrome[i]) - 1)
