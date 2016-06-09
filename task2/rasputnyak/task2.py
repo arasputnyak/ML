@@ -70,8 +70,10 @@ def cross_validation(train_test_data, regression_type, k):
         beta = regression_type(x_tr, y_tr)
         err = 0
         for j in range(len(y_tst)):
-            err += (y_tst[j] - beta) ** 2
+            err += (y_tst[j] - beta * x_tst) ** 2
+        err = err / len(y_tst)
         errors.append(err)
+    return sum(errors) / k
 
 #a = np.array([[2], [1], [1], [8]])
 #b = np.array([[5], [0], [1], [0]])
