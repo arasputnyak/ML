@@ -179,6 +179,26 @@ def weighted_kNN(test_train_data_X, test_train_data_Y, k, distance):
         # q[h] = testData[h], answer[h]
         # print(q)
     return godwhy
+    
+def grid_search(k, data_X, data_Y, K, kNN, distance):
+    acc = 0
+    good_k = 0
+    test_train_data_X = splitData(data_X, K)
+    test_train_data_Y = splitData(data_Y, K)
+    for i in range(K):
+        ts_Y = test_train_data_Y[i][1]
+        for h in range(1, k):
+            classes = kNN(test_train_data_X, test_train_data_Y, k, distance)
+            err = 0
+            for j in range(len(ts_Y)):
+                if ts_Y[j] != classes[i][j]:
+                    err += 1
+            err = err / len(ts_Y)
+            if (1 - err) > acc:
+                acc = 1 - err
+                good_k = h
+        acc = 0
+        print(good_k)
 
 #A = splitData(X, 5)
 #B = splitData(Y, 5)
