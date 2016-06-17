@@ -1,4 +1,5 @@
 import numpy as np
+import random, copy
 
 def regression(x, y):
     x1 = np.transpose(x)
@@ -55,7 +56,40 @@ def k_fold(data, k):
                 testData.append(data[j])
             else:
                 trainData.append(data[j])
-        train_test_data.append([trainData, testData])
+        one = copy.deepcopy(trainData)
+        two = copy.deepcopy(testData)
+        train_test_data.append([one, two])
+        trainData.clear()
+        testData.clear()
+    return train_test_data
+
+def random_cv(data, n, k):
+    trainData = []
+    testData = []
+    train_test_data = []
+    for j in range(k):
+        rand = []
+        helper = []
+        h = 1
+        for i in range(len(data)):
+            helper.append(i)
+        for i in range(n):
+            while (h != 0):
+                i = random.randint(0, len(data) - 1)
+                if helper[i] >= 0:
+                    r = helper[i]
+                    rand.append(r)
+                    helper[i] = -1
+                    h = 0
+            h = -1
+        for i in range(len(data)):
+            if rand.count(i) > 0:
+                testData.append(data[i])
+            else:
+                trainData.append(data[i])
+        one = copy.deepcopy(trainData)
+        two = copy.deepcopy(testData)
+        train_test_data.append([one, two])
         trainData.clear()
         testData.clear()
     return train_test_data
