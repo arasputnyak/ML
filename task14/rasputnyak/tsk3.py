@@ -1,16 +1,15 @@
-import numpy as np
 import random, copy
 
 def f(x):
     fc = 0
     n = x.shape[0]
     for i in range(n):
-        fc += 2 * x[i] + 1
+        fc += 2 * x[i]  + 1
     return fc
 
-def gen_alg(f, dim, num, pr, bt):
+def gen_alg(repeat, f, dim, num, pr, bt):
     new_gen = generation(dim, num)
-    for k in range(20):
+    for k in range(repeat):
         pairs = paIrs(new_gen, pr)
         new_chrome = two_point_cross(pairs, dim)
         mut = mutation(new_gen)
@@ -29,7 +28,11 @@ def gen_alg(f, dim, num, pr, bt):
             best.append(all_ch[l])
             func[l] = 66666
         new_gen = best
-    return new_gen
+    massivchik = []
+    for i in range(len(new_gen)):
+        massivchik.append(f(new_gen[i]))
+    answer = min(massivchik)
+    return answer
 
 def generation(dim, num):
     new_gen = []
@@ -92,6 +95,8 @@ def mutation(chrome1):
         r = random.randint(1, dim - 2)
         chrome[i][r - 1], chrome[i][r + 1] = chrome[i][r + 1], chrome[i][r - 1]
     return chrome
+
+print(gen_alg(30000, f, 5, 8, 3, 8))
 
 
 
