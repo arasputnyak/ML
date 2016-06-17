@@ -1,5 +1,5 @@
 import copy
-import math
+import math, random
 from sklearn import datasets
 
 iris = datasets.load_iris()
@@ -37,6 +37,24 @@ def splitData(data, k):
         testData.clear()
     return train_test_data
 
+def cross_validation(data_X, data_Y, k, kNN, neir, distance):
+    errors = []
+    test_train_data_X = splitData(data_X, k)
+    test_train_data_Y = splitData(data_Y, k)
+    classes = kNN(test_train_data_X, test_train_data_Y, neir, distance)
+    for i in range(k):
+        #trainData = test_train_data_X[i][0]
+        #testData = test_train_data_X[i][1]
+        #tr_Y = test_train_data_Y[i][0]
+        ts_Y = test_train_data_Y[i][1]
+        err = 0
+        for j in range(len(ts_Y)):
+            if ts_Y[j] != classes[i][j]:
+                err += 1
+        err = err / len(ts_Y)
+        errors.append(err)
+    return sum(errors) / k
+
 def num_of_elem(lst, elem, k):
     count = 0
     for i in range(k):
@@ -45,6 +63,7 @@ def num_of_elem(lst, elem, k):
     return count
 
 def kNN(test_train_data_X, test_train_data_Y, k, distance):
+    godwhy = []
     lst = []
     lst2 = []
     lst3 = []
@@ -86,17 +105,22 @@ def kNN(test_train_data_X, test_train_data_Y, k, distance):
             if maxx == class_three:
                 ans = 2
             answer.append(ans)
-        q = []
-        for h in range(l1):
-            q.append([])
-        for h in range(l1):
-            q[h] = testData[h], answer[h]
-        print(q)
+        godwhy.append(answer)
+        #q = []
+        #for h in range(l1):
+            #q.append([])
+        #for h in range(l1):
+            #q[h] = testData[h], answer[h]
+        #print(q)
+    return godwhy
 
-def weighted_kNN(test_train_data_X, test_train_data_Y, k, distance, a):
+def weighted_kNN(test_train_data_X, test_train_data_Y, k, distance):
+    godwhy = []
     lst = []
     lst2 = []
     lst3 = []
+    a = 2
+    #a = random.randint(1, 5)
     for i in range(len(test_train_data_X)):
         trainData = test_train_data_X[i][0]
         testData = test_train_data_X[i][1]
@@ -147,16 +171,19 @@ def weighted_kNN(test_train_data_X, test_train_data_Y, k, distance, a):
             if maxx == w2:
                 ans = 2
             answer.append(ans)
-        q = []
-        for h in range(l1):
-            q.append([])
-        for h in range(l1):
-            q[h] = testData[h], answer[h]
-        print(q)
+        godwhy.append(answer)
+        # q = []
+        # for h in range(l1):
+        # q.append([])
+        # for h in range(l1):
+        # q[h] = testData[h], answer[h]
+        # print(q)
+    return godwhy
 
-A = splitData(X, 5)
-B = splitData(Y, 5)
+#A = splitData(X, 5)
+#B = splitData(Y, 5)
 
-print(kNN(A, B, 115, distance1))
-print(weighted_kNN(A, B, 110, distance1, 2))
-
+#print(kNN(A, B, 115, distance1))
+#print(weighted_kNN(A, B, 110, distance1, 2))
+#print(cross_validation(X, Y, 5, kNN, 115, distance1))
+#print(cross_validation(X, Y, 3, weighted_kNN, 90, distance1))
